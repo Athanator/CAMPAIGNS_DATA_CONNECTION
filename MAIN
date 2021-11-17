@@ -2,94 +2,87 @@ SELECT DISTINCT
 
 
 
-       WH.AC_REGISTR AS REG,
+       wo_header.ac_registr As REG,
        SUBSTR(
-          DH.ATA_CHAPTER,
+          doc_header.ata_chapter,
           1,
           2
-       ) AS ATA,
-	   
-	   
-	   
+       ) As ATA,
 (SELECT DISTINCT
 
 CASE
-WHEN (SELECT DISTINCT DH8.DOC_TYPE FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'AD') IS NOT NULL  THEN 
-(SELECT DISTINCT DH8.DOCNO FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'AD')
+WHEN (SELECT DISTINCT doc_header.doc_type FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'AD') IS NOT NULL  THEN (SELECT DISTINCT doc_header.docno FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'AD')
 
-WHEN (SELECT DISTINCT DH8.DOC_TYPE FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'AD') IS NULL AND  DH3.DOCNO IS NOT NULL THEN DH3.DOCNO
+WHEN (SELECT DISTINCT doc_header.doc_type FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'AD') IS NULL AND  dh3.docno IS NOT NULL THEN dh3.docno
 
-ELSE DH4.DOCNO
-END AS PROVA
+ELSE dh4.docno
+End as prova
 
-FROM "AMOSSERVER_PROD"."DOC_SIGNOFF_TREE" DST1
+FROM doc_signoff_tree dst1
 
-LEFT JOIN "AMOSSERVER_PROD"."DOC_SIGNOFF_TREE" DST2 ON DST2.DOCNO_I IN(DST1.DOCNO_I, DST1.REF_DOCNO_I)
-LEFT JOIN "AMOSSERVER_PROD"."DOC_SIGNOFF_TREE" DST3 ON DST3.REF_DOCNO_I = DST2.DOCNO_I
-LEFT JOIN "AMOSSERVER_PROD"."DOC_SIGNOFF_TREE" DST4 ON DST4.REF_DOCNO_I = DST3.DOCNO_I
+LEFT JOIN doc_signoff_tree dst2 ON dst2.docno_i IN(dst1.docno_i, dst1.ref_docno_i)
+LEFT JOIN doc_signoff_tree dst3 ON dst3.ref_docno_i = dst2.docno_i
+LEFT JOIN doc_signoff_tree dst4 ON dst4.ref_docno_i = dst3.docno_i
 
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH1 ON DH1.DOCNO_I = DST1.REF_DOCNO_I
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH2 ON DH2.DOCNO_I = DST2.DOCNO_I AND DH2.DOC_TYPE = 'AD'
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH3 ON DH3.DOCNO_I = DST3.DOCNO_I AND DH3.DOC_TYPE = 'AD'
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH4 ON DH4.DOCNO_I = DST4.DOCNO_I AND DH4.DOC_TYPE = 'AD'
+LEFT JOIN doc_header dh1 ON dh1.docno_i = dst1.ref_docno_i
+LEFT JOIN doc_header dh2 ON dh2.docno_i = dst2.docno_i AND dh2.doc_type = 'AD'
+LEFT JOIN doc_header dh3 ON dh3.docno_i = dst3.docno_i AND dh3.doc_type = 'AD'
+LEFT JOIN doc_header dh4 ON dh4.docno_i = dst4.docno_i AND dh4.doc_type = 'AD'
 
-WHERE DH1.DOCNO_I = DH.DOCNO_I AND ROWNUM = 1 AND CASE
-WHEN (SELECT DISTINCT DH8.DOC_TYPE FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'AD') IS NOT NULL  THEN 
-(SELECT DISTINCT DH8.DOCNO FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'AD')
+WHERE dh1.docno_i = doc_header.docno_i AND rownum = 1 AND CASE
+WHEN (SELECT DISTINCT doc_header.doc_type FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'AD') IS NOT NULL  THEN (SELECT DISTINCT doc_header.docno FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'AD')
 
-WHEN (SELECT DISTINCT DH8.DOC_TYPE FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8  WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'AD') IS NULL AND  DH3.DOCNO IS NOT NULL THEN DH3.DOCNO
+WHEN (SELECT DISTINCT doc_header.doc_type FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'AD') IS NULL AND  dh3.docno IS NOT NULL THEN dh3.docno
 
-ELSE DH4.DOCNO
-END IS NOT NULL
+ELSE dh4.docno
+End IS NOT NULL
 
 
 
 
-) AS AD,
+) As AD,
 
 (SELECT DISTINCT
 CASE
-WHEN (SELECT DISTINCT DH8.DOC_TYPE FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'MA%') IS NOT NULL  THEN 
-(SELECT DISTINCT DH8.DOCNO FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'MA%')
+WHEN (SELECT DISTINCT doc_header.doc_type FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'MA%') IS NOT NULL  THEN (SELECT DISTINCT doc_header.docno FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'MA%')
 
-WHEN (SELECT DISTINCT DH8.DOC_TYPE FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'MA%') IS NULL  THEN DH3.DOCNO
+WHEN (SELECT DISTINCT doc_header.doc_type FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'MA%') IS NULL  THEN dh3.docno
 
-ELSE DH4.DOCNO
-END AS PROVA
+ELSE dh4.docno
+End as prova
 
-FROM "AMOSSERVER_PROD"."DOC_SIGNOFF_TREE" DST1
+FROM doc_signoff_tree dst1
 
-LEFT JOIN "AMOSSERVER_PROD"."DOC_SIGNOFF_TREE" DST2 ON DST2.DOCNO_I IN(DST1.DOCNO_I, DST1.REF_DOCNO_I)
-LEFT JOIN "AMOSSERVER_PROD"."DOC_SIGNOFF_TREE" DST3 ON DST3.REF_DOCNO_I = DST2.DOCNO_I
-LEFT JOIN "AMOSSERVER_PROD"."DOC_SIGNOFF_TREE" DST4 ON DST4.REF_DOCNO_I = DST3.DOCNO_I
+LEFT JOIN doc_signoff_tree dst2 ON dst2.docno_i IN(dst1.docno_i, dst1.ref_docno_i)
+LEFT JOIN doc_signoff_tree dst3 ON dst3.ref_docno_i = dst2.docno_i
+LEFT JOIN doc_signoff_tree dst4 ON dst4.ref_docno_i = dst3.docno_i
 
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH1 ON DH1.DOCNO_I = DST1.REF_DOCNO_I
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH2 ON DH2.DOCNO_I = DST2.DOCNO_I AND DH2.DOC_TYPE = 'MA'
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH3 ON DH3.DOCNO_I = DST3.DOCNO_I AND DH3.DOC_TYPE = 'MA'
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH4 ON DH4.DOCNO_I = DST4.DOCNO_I AND DH4.DOC_TYPE = 'MA'
+LEFT JOIN doc_header dh1 ON dh1.docno_i = dst1.ref_docno_i
+LEFT JOIN doc_header dh2 ON dh2.docno_i = dst2.docno_i AND dh2.doc_type = 'MA'
+LEFT JOIN doc_header dh3 ON dh3.docno_i = dst3.docno_i AND dh3.doc_type = 'MA'
+LEFT JOIN doc_header dh4 ON dh4.docno_i = dst4.docno_i AND dh4.doc_type = 'MA'
 
-WHERE DH1.DOCNO_I = DH.DOCNO_I AND 
+WHERE dh1.docno_i = doc_header.docno_i AND 
 
 
 CASE
-WHEN (SELECT DISTINCT DH8.DOC_TYPE FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'MA%') IS NOT NULL  THEN 
-(SELECT DISTINCT DH8.DOCNO FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'MA%')
+WHEN (SELECT DISTINCT doc_header.doc_type FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'MA%') IS NOT NULL  THEN (SELECT DISTINCT doc_header.docno FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'MA%')
 
-WHEN (SELECT DISTINCT DH8.DOC_TYPE FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8 WHERE DH8.DOCNO_I = DST1.DOCNO_I AND DH8.DOC_TYPE LIKE 'MA%') IS NULL  THEN DH3.DOCNO
+WHEN (SELECT DISTINCT doc_header.doc_type FROM doc_header WHERE doc_header.docno_i = dst1.docno_i AND doc_header.doc_type LIKE 'MA%') IS NULL  THEN dh3.docno
 
-ELSE DH4.DOCNO
-END IS NOT NULL
-
+ELSE dh4.docno
+End IS NOT NULL
 
 
-) AS MA,
-       DH.DOC_TYPE,
-       DH.DOCNO AS DOCUMENT,
-       DH.REVISION AS REV,
 
-   CASE WHEN DH.DOC_TYPE LIKE '%AD%' 
-       OR F.PRIO = '1' 
-       OR DH.DOCNO IN(
+) As MA,
+       doc_header.doc_type,
+       doc_header.docno As Document,
+       doc_header.revision As Rev,
+
+   CASE WHEN doc_header.doc_type LIKE '%AD%' 
+       OR forecast.prio = '1' 
+       OR doc_header.docno IN(
           '34-1712',
           '34-1720',
           '34-1630',
@@ -101,76 +94,76 @@ END IS NOT NULL
           '46-1095',
           '46-1121'
        ) THEN 'TECH. SERV. (AD)'  
-WHEN D.DESCRIPTION  LIKE '%TECH. SERVICES - EASA AD/MANDATE%' THEN 'TECH. SERV. (AD)'
-WHEN D.DESCRIPTION  LIKE '%TECHNICAL SERVICES%' THEN 'TECH. SERV. (REC)'
-ELSE D.DESCRIPTION 
+WHEN department.description  LIKE '%TECH. SERVICES - EASA AD/MANDATE%' THEN 'TECH. SERV. (AD)'
+WHEN department.description  LIKE '%TECHNICAL SERVICES%' THEN 'TECH. SERV. (REC)'
+ELSE department.description 
 
-END AS SOURCE,
+END As Source,
 
 CASE
-WHEN DH.DOCNO = 'AED2019-47M' THEN 'MODIFICATION OF EEL ON A320 CEO'
-WHEN DH.DOCNO = '4611-401-01' THEN 'MODIFICATION OF EFB HOLDER'
-WHEN DH.DOCNO = '31-1450' THEN 'MODIFICATION OF SDAC TO H2-F4'
-WHEN DH.DOCNO = '34-1630' THEN 'ACTIVATION OF ATC ADSB-OUT'
-WHEN DH.DOCNO = '34-1712' THEN 'INSTALLATION OF ATC ACSS ADS-B'
-WHEN DH.DOCNO = '34-1744' THEN 'INSTALLTION OF WIRING ATC ADS-B'
-WHEN DH.DOCNO = '27-1273' THEN 'INSPECTION OF RUDDER SERVO FOR MISSING LOCKWIRE'
-WHEN DH.DOCNO = '780085-EO-103 PART 1' THEN 'INSTALLATION OF FWD CARGO FLOOR (CARGOTEK)'
-WHEN DH.DOCNO = '780085-EO-104 PART 1' THEN 'INSTALLATION OF AFT CARGO FLOOR (CARGOTEK)'
-WHEN DH.DOCNO = '21-1217' THEN 'MODIFICATION OF AEVC (V .07)'
-WHEN DH.DOCNO = '63253213BC-588-01' THEN 'WIFI: BMU SW DROP 3 UPGRADE'
-WHEN DH.DOCNO = '01576-IST-B-SRB' THEN 'WIFI: ORT FILE 63AA UPGRADE'
-WHEN DH.DOCNO = '32-1470' THEN 'MODIFICATION OF ACC. PRE-CHARGE PRESSURE (CEO)'
-WHEN DH.DOCNO = '53-1270' THEN 'MODIFICATION OF FASTENER HOLE OF FRAME FEET COUPLING'
-WHEN DH.DOCNO = '2270-301-06' THEN 'UPGRADE OF FMGC SOFTWARE (S7BI15)'
-WHEN DH.DOCNO = 'SCA-01076-SB-S06' THEN 'WIFI: SDU SW-4000-7'
-WHEN DH.DOCNO = '3342-401-01' THEN 'REPLACEMENT OF LANDING LIGHT'
-WHEN DH.DOCNO = '01598-IST-A-SRB' THEN 'WIFI: 2000VU STICKERS MODIFICATION'
-WHEN DH.DOCNO = 'AZQ01-53AB-EI-002' THEN 'INSTALLATION OF LF-ULD A320 - VLG'
-WHEN DH.DOCNO = '2234440-170' THEN 'INSTALLATION OF WQAR '
-WHEN DH.DOCNO = '2234440-173' THEN 'INSTALLATION OF WQAR '
-WHEN DH.DOCNO = '54-1036' THEN 'MODIFICATION OF PYLONS AFT FIXED FAIRING'
-WHEN DH.DOCNO = '27-1245' THEN 'INSTALLATION PROVISIONS FOR ELSD'
-WHEN DH.DOCNO = '27-1247' THEN 'MODIFICATION OF THSA WITH ELSD'
-WHEN DH.DOCNO = '27-1248' THEN 'ACTIVATION OF ELSD ON SA THSA'
-WHEN DH.DOCNO = '2270-301-05' THEN 'UPGRADE OF FMGC SOFTWARE (S7BC14)'
-WHEN DH.DOCNO = '32-1444' THEN 'REPLACEMENT OF 62GA RELAY'
-WHEN DH.DOCNO = 'AVI-02080-SB' THEN 'HEADSETS: MODIFICATION OF A/C CONNECTOR'
-WHEN DH.DOCNO = 'PW1000G-C-75-00-0023-00A-930A-D' THEN 'INSPECTION OF TCC AIR VALVE ON PW ENG'
-WHEN DH.DOCNO = '2793-301-01' THEN 'UPGRADE OF ELAC SW (L103+) ON A320 NEO'
-WHEN DH.DOCNO = '73-1138' THEN 'UPGRADE OF EEC (SCN23/AC) SW ON IAE ENGINES'
-WHEN DH.DOCNO = '112F-21' THEN 'ENGINE REPLACEMENT FOR IN-SHOP INSPECTION (V2500)'
-WHEN DH.DOCNO = 'SCA-01076-SB-S07' THEN 'WIFI: REPLACEMENT OF MSS ANTENNA'
-WHEN DH.DOCNO = '54-1048' THEN 'REMOVAL OF FLAP-DOOR OF THE PRECOOLER EXHAUST'
-WHEN DH.DOCNO = 'GRAA320NEO-A-29-11-0004-00001-930AD' THEN 'INSPECTION OF HYDRAULIC SUCTION HOSE ON PW ENGINES'
-WHEN DH.DOCNO = '01621-IST-A-SRB' THEN 'INSPECTION OF WIFI SERVER TRAY'
-WHEN DH.DOCNO = '780085-EO-302' THEN 'INSTALLATION OF AFT CARGO FLOOR (CARGOTEK)'
-WHEN DH.DOCNO = '780085-EO-501' THEN 'INSTALLATION OF FWD CARGO FLOOR (CARGOTEK)'
-WHEN DH.DOCNO = '780085-EO-502' THEN 'INSTALLATION OF AFT CARGO FLOOR (CARGOTEK)'
-WHEN DH.DOCNO = '53-1337' THEN 'MODIFICATION OF STIFFENER ON RHS FRAME'
-WHEN DH.DOCNO = '53-1338' THEN 'MODIFICATION OF STIFFENER ON LHS FRAME'
-WHEN DH.DOCNO = '3136-201-06' THEN 'UPGRADE OF WQAR SOFTWARE (MOVISTAR)'
-WHEN DH.DOCNO = '53-1406' THEN 'MODIFICATION OF VERTICAL STIFFENER ON RH FRAME'
-WHEN DH.DOCNO = '53-1407' THEN 'MODIFICATION OF VERTICAL STIFFENER ON LH FRAME'
-WHEN DH.DOCNO = '2351-401-01' THEN 'REPLACEMENT OF HEADSETS'
-WHEN DH.DOCNO = '49-1107' THEN 'MODIFICATION OF APU ECB'
-WHEN DH.DOCNO = 'RA32071-164' THEN 'REPLACEMENT OF AFT ENG MOUNT RETAINER'
-WHEN DH.DOCNO = '27-1286' THEN 'INSTALLATION OF PROTECTION ON THS CTRL CABLES (CEO)'
-WHEN DH.DOCNO = '53-1262' THEN 'MODIFICATION AT SECTION 16-17 AND 18'
-WHEN DH.DOCNO = '36-1084' THEN 'MODIFICATION OF DIFFERENTIAL PRESSURE SENSOR (DPS)'
-WHEN DH.DOCNO = '53-1269' THEN 'INSPECTION OF FRAME FOOT AT FR43 RH/LH'
-WHEN DH.DOCNO = '71-1066-AD PART' THEN 'INSPECTION OF FWD ENGINE MOUNT SNOUT'
-WHEN DH.DOCNO = '71-1065-AD PART' THEN 'MODIFICATION OF FWD ENGINE MOUNT SNOUT'
-WHEN DH.DOCNO = '32-1473' THEN 'INSPECTION OF MLG DAMPER UNIT'
+WHEN doc_header.docno = 'AED2019-47M' THEN 'MODIFICATION OF EEL ON A320 CEO'
+WHEN doc_header.docno = '4611-401-01' THEN 'MODIFICATION OF EFB HOLDER'
+WHEN doc_header.docno = '31-1450' THEN 'MODIFICATION OF SDAC TO H2-F4'
+WHEN doc_header.docno = '34-1630' THEN 'ACTIVATION OF ATC ADSB-OUT'
+WHEN doc_header.docno = '34-1712' THEN 'INSTALLATION OF ATC ACSS ADS-B'
+WHEN doc_header.docno = '34-1744' THEN 'INSTALLTION OF WIRING ATC ADS-B'
+WHEN doc_header.docno = '27-1273' THEN 'INSPECTION OF RUDDER SERVO FOR MISSING LOCKWIRE'
+WHEN doc_header.docno = '780085-EO-103 PART 1' THEN 'INSTALLATION OF FWD CARGO FLOOR (CARGOTEK)'
+WHEN doc_header.docno = '780085-EO-104 PART 1' THEN 'INSTALLATION OF AFT CARGO FLOOR (CARGOTEK)'
+WHEN doc_header.docno = '21-1217' THEN 'MODIFICATION OF AEVC (V .07)'
+WHEN doc_header.docno = '63253213BC-588-01' THEN 'WIFI: BMU SW DROP 3 UPGRADE'
+WHEN doc_header.docno = '01576-IST-B-SRB' THEN 'WIFI: ORT FILE 63AA UPGRADE'
+WHEN doc_header.docno = '32-1470' THEN 'MODIFICATION OF ACC. PRE-CHARGE PRESSURE (CEO)'
+WHEN doc_header.docno = '53-1270' THEN 'MODIFICATION OF FASTENER HOLE OF FRAME FEET COUPLING'
+WHEN doc_header.docno = '2270-301-06' THEN 'UPGRADE OF FMGC SOFTWARE (S7BI15)'
+WHEN doc_header.docno = 'SCA-01076-SB-S06' THEN 'WIFI: SDU SW-4000-7'
+WHEN doc_header.docno = '3342-401-01' THEN 'REPLACEMENT OF LANDING LIGHT'
+WHEN doc_header.docno = '01598-IST-A-SRB' THEN 'WIFI: 2000VU STICKERS MODIFICATION'
+WHEN doc_header.docno = 'AZQ01-53AB-EI-002' THEN 'INSTALLATION OF LF-ULD A320 - VLG'
+WHEN doc_header.docno = '2234440-170' THEN 'INSTALLATION OF WQAR '
+WHEN doc_header.docno = '2234440-173' THEN 'INSTALLATION OF WQAR '
+WHEN doc_header.docno = '54-1036' THEN 'MODIFICATION OF PYLONS AFT FIXED FAIRING'
+WHEN doc_header.docno = '27-1245' THEN 'INSTALLATION PROVISIONS FOR ELSD'
+WHEN doc_header.docno = '27-1247' THEN 'MODIFICATION OF THSA WITH ELSD'
+WHEN doc_header.docno = '27-1248' THEN 'ACTIVATION OF ELSD ON SA THSA'
+WHEN doc_header.docno = '2270-301-05' THEN 'UPGRADE OF FMGC SOFTWARE (S7BC14)'
+WHEN doc_header.docno = '32-1444' THEN 'REPLACEMENT OF 62GA RELAY'
+WHEN doc_header.docno = 'AVI-02080-SB' THEN 'HEADSETS: MODIFICATION OF A/C CONNECTOR'
+WHEN doc_header.docno = 'PW1000G-C-75-00-0023-00A-930A-D' THEN 'INSPECTION OF TCC AIR VALVE ON PW ENG'
+WHEN doc_header.docno = '2793-301-01' THEN 'UPGRADE OF ELAC SW (L103+) ON A320 NEO'
+WHEN doc_header.docno = '73-1138' THEN 'UPGRADE OF EEC (SCN23/AC) SW ON IAE ENGINES'
+WHEN doc_header.docno = '112F-21' THEN 'ENGINE REPLACEMENT FOR IN-SHOP INSPECTION (V2500)'
+WHEN doc_header.docno = 'SCA-01076-SB-S07' THEN 'WIFI: REPLACEMENT OF MSS ANTENNA'
+WHEN doc_header.docno = '54-1048' THEN 'REMOVAL OF FLAP-DOOR OF THE PRECOOLER EXHAUST'
+WHEN doc_header.docno = 'GRAA320NEO-A-29-11-0004-00001-930AD' THEN 'INSPECTION OF HYDRAULIC SUCTION HOSE ON PW ENGINES'
+WHEN doc_header.docno = '01621-IST-A-SRB' THEN 'INSPECTION OF WIFI SERVER TRAY'
+WHEN doc_header.docno = '780085-EO-302' THEN 'INSTALLATION OF AFT CARGO FLOOR (CARGOTEK)'
+WHEN doc_header.docno = '780085-EO-501' THEN 'INSTALLATION OF FWD CARGO FLOOR (CARGOTEK)'
+WHEN doc_header.docno = '780085-EO-502' THEN 'INSTALLATION OF AFT CARGO FLOOR (CARGOTEK)'
+WHEN doc_header.docno = '53-1337' THEN 'MODIFICATION OF STIFFENER ON RHS FRAME'
+WHEN doc_header.docno = '53-1338' THEN 'MODIFICATION OF STIFFENER ON LHS FRAME'
+WHEN doc_header.docno = '3136-201-06' THEN 'UPGRADE OF WQAR SOFTWARE (MOVISTAR)'
+WHEN doc_header.docno = '53-1406' THEN 'MODIFICATION OF VERTICAL STIFFENER ON RH FRAME'
+WHEN doc_header.docno = '53-1407' THEN 'MODIFICATION OF VERTICAL STIFFENER ON LH FRAME'
+WHEN doc_header.docno = '2351-401-01' THEN 'REPLACEMENT OF HEADSETS'
+WHEN doc_header.docno = '49-1107' THEN 'MODIFICATION OF APU ECB'
+WHEN doc_header.docno = 'RA32071-164' THEN 'REPLACEMENT OF AFT ENG MOUNT RETAINER'
+WHEN doc_header.docno = '27-1286' THEN 'INSTALLATION OF PROTECTION ON THS CTRL CABLES (CEO)'
+WHEN doc_header.docno = '53-1262' THEN 'MODIFICATION AT SECTION 16-17 AND 18'
+WHEN doc_header.docno = '36-1084' THEN 'MODIFICATION OF DIFFERENTIAL PRESSURE SENSOR (DPS)'
+WHEN doc_header.docno = '53-1269' THEN 'INSPECTION OF FRAME FOOT AT FR43 RH/LH'
+WHEN doc_header.docno = '71-1066-AD PART' THEN 'INSPECTION OF FWD ENGINE MOUNT SNOUT'
+WHEN doc_header.docno = '71-1065-AD PART' THEN 'MODIFICATION OF FWD ENGINE MOUNT SNOUT'
+WHEN doc_header.docno = '32-1473' THEN 'INSPECTION OF MLG DAMPER UNIT'
 
 ELSE CONCAT (
-          DH.TEXT,
-          DH.TEXT2        
+          doc_header.text,
+          doc_header.text2        
        ) 
 
-END AS SUBJECT,
+END As Subject,
 
-       WH.WORKORDERNO_DISPLAY AS WORKORDER,
+       wo_header.workorderno_display As Workorder,
 (SELECT DISTINCT
 
 
@@ -179,269 +172,268 @@ CASE
 WHEN (SELECT DISTINCT
 
 
-TREQ_I.DIMENSION_TYPE
+treq_interval.dimension_type
 
-FROM "AMOSSERVER_PROD"."DOC_HEADER" DH1
+FROM doc_header dh1
 
-INNER JOIN "AMOSSERVER_PROD"."EVENT_EFFECTIVITY_LINK" EEL ON  EEL.EVENT_TYPE='DO' AND EEL.EVENT_KEY = DH1.DOCNO_I 
-INNER JOIN "AMOSSERVER_PROD"."EVENT_EFFECTIVITY" EE ON EEL.EFFECTIVITYNO_I = EE.EFFECTIVITYNO_I 
-INNER JOIN (SELECT DISTINCT ME.REVISION_KEY, ME.REVISION_TYPE, ME.APPLICABLE_STATUS, ME.TIMEREQUIREMENTNO_I FROM     "AMOSSERVER_PROD"."MEVT_EFFECTIVITY" ME) ME2 ON 
-EEL.EVENT_KEY = ME2.REVISION_KEY AND ME2.REVISION_TYPE = 'DO'
+inner join event_effectivity_link on  event_effectivity_link.event_type='DO' and event_effectivity_link.event_key = dh1.docno_i 
+inner join event_effectivity event_effectivity on event_effectivity_link.effectivityno_i = event_effectivity.effectivityno_i 
+INNER JOIN (SELECT DISTINCT me.revision_key, me.revision_type, me.applicable_status, me.timerequirementno_i FROM     mevt_effectivity me) me2 ON event_effectivity_link.event_key = me2.revision_key AND me2.revision_type = 'DO'
 
-INNER JOIN "AMOSSERVER_PROD"."TREQ_TIME_REQUIREMENT" TREQ_TR ON ME2.TIMEREQUIREMENTNO_I = TREQ_TR.TIMEREQUIREMENTNO_I 
+INNER JOIN treq_time_requirement ON me2.timerequirementno_i = treq_time_requirement.timerequirementno_i 
 
-INNER JOIN "AMOSSERVER_PROD"."TREQ_INTERVAL_GROUP" TREQ_IG ON TREQ_TR.TIMEREQUIREMENTNO_I = TREQ_IG.TIMEREQUIREMENTNO_I 
+INNER JOIN treq_interval_group ON treq_time_requirement.timerequirementno_i = treq_interval_group.timerequirementno_i 
 
-LEFT JOIN "AMOSSERVER_PROD"."TREQ_DIMENSION_GROUP" TREQ_DG ON TREQ_IG.INTERVAL_GROUPNO_I = TREQ_DG.INTERVAL_GROUPNO_I
+LEFT JOIN treq_dimension_group ON treq_interval_group.interval_groupno_i = treq_dimension_group.interval_groupno_i
 
-LEFT JOIN "AMOSSERVER_PROD"."TREQ_INTERVAL" TREQ_I ON TREQ_DG.DIMENSION_GROUPNO_I = TREQ_I.DIMENSION_GROUPNO_I
+LEFT JOIN treq_interval ON treq_dimension_group.dimension_groupno_i = treq_interval.dimension_groupno_i
 
-WHERE DH1.DOCNO_I =  DH8.DOCNO_I AND TREQ_I.DIMENSION_TYPE = 'I')  = 'I' THEN 'Y'
+WHERE dh1.docno_i =  dh.docno_i AND treq_interval.dimension_type = 'I')  = 'I' THEN 'Y'
 
 ELSE 'N'
 
-END AS REPETITVE
+END As repetitve
 
-FROM "AMOSSERVER_PROD"."DOC_HEADER" DH8
+FROM doc_header dh
 
 
 
-WHERE DH8.DOCNO_I = DH.DOCNO_I) AS REP_DOC,
+WHERE dh.docno_i = doc_header.docno_i) As rep_doc,
 
 
 
 CASE
-WHEN DHM.IMP_OCCASION = 'L' THEN 'LINE'
-WHEN DHM.IMP_OCCASION = 'H' THEN 'HEAVY'
-WHEN DHM.IMP_OCCASION = 'S' THEN 'SPECIAL'
-WHEN DHM.IMP_OCCASION = 'R' THEN 'INFO'
-WHEN DHM.IMP_OCCASION = 'O' THEN 'HEAVY/SPECIAL'
+WHEN doc_header_more.imp_occasion = 'L' THEN 'LINE'
+WHEN doc_header_more.imp_occasion = 'H' THEN 'HEAVY'
+WHEN doc_header_more.imp_occasion = 'S' THEN 'SPECIAL'
+WHEN doc_header_more.imp_occasion = 'R' THEN 'INFO'
+WHEN doc_header_more.imp_occasion = 'O' THEN 'HEAVY/SPECIAL'
 
 ELSE 'HEAVY/LINE'
 
-END AS LINE_OR_HEAVY,
-       CASE        WHEN WEL.EVENT_STATUS = 'O' 
-       AND WH.CLOSING_DATE IS NULL THEN 'OPEN' WHEN WEL.EVENT_STATUS = 'Y' 
-       AND WH.CLOSING_DATE IS NULL THEN 'OPEN' 	       WHEN WEL.EVENT_STATUS = 'O' 
-       AND WH.CLOSING_DATE IS NOT NULL THEN 'CLOSED'  WHEN WEL.EVENT_STATUS = 'Y' 
-       AND WH.CLOSING_DATE IS NOT NULL THEN 'CLOSED'  WHEN WEL.EVENT_STATUS = 'V' THEN 'CLOSED'  END AS STATUS,
+End as Line_or_heavy,
+       CASE        WHEN wo_event_link.event_status = 'O' 
+       AND wo_header.closing_date IS NULL THEN 'OPEN' WHEN wo_event_link.event_status = 'Y' 
+       AND wo_header.closing_date IS NULL THEN 'OPEN' 	       WHEN wo_event_link.event_status = 'O' 
+       AND wo_header.closing_date IS NOT NULL THEN 'CLOSED'  WHEN wo_event_link.event_status = 'Y' 
+       AND wo_header.closing_date IS NOT NULL THEN 'CLOSED'  WHEN wo_event_link.event_status = 'V' THEN 'CLOSED'  END As Status,
 
-       WH.CLOSING_DATE,
+       wo_header.closing_date,
       
 CASE
 WHEN  (SELECT*
 
-FROM (SELECT WT2.ABSOLUTE_DUE_DATE FROM "AMOSSERVER_PROD"."WO_TRANSFER" WT2
+FROM (SELECT wo_transfer.absolute_due_date from wo_transfer
 
 
- WHERE WT2.TRANSFER_TYPE IN('O','T') AND WH.AC_REGISTR = A.AC_REGISTR AND WEL.EVENT_PERFNO_I = WT2.EVENT_PERFNO_I AND WEL.EVENT_KEY_PARENT = DH.DOCNO_I  
+ WHERE wo_transfer.transfer_type IN('O','T') AND wo_header.ac_registr = aircraft.ac_registr AND wo_event_link.event_perfno_i = wo_transfer.event_perfno_i AND wo_event_link.event_key_parent = doc_header.docno_i  
 
-ORDER BY WT2.EVENT_TRANSFERNO_I DESC ) WHERE ROWNUM = 1   )   IS NULL THEN F.EXPECTED_DATE
+ORDER BY wo_transfer.event_transferno_i desc ) WHERE rownum = 1   )   IS NULL THEN forecast.expected_date
 
 ELSE  (SELECT*
 
-FROM (SELECT WT2.ABSOLUTE_DUE_DATE FROM "AMOSSERVER_PROD"."WO_TRANSFER" WT2
+FROM (SELECT wo_transfer.absolute_due_date from wo_transfer
 
 
- WHERE WT2.TRANSFER_TYPE IN('O','T') AND WH.AC_REGISTR = A.AC_REGISTR AND WEL.EVENT_PERFNO_I = WT2.EVENT_PERFNO_I 
- AND WEL.EVENT_KEY_PARENT = DH.DOCNO_I  
+ WHERE wo_transfer.transfer_type IN('O','T') AND wo_header.ac_registr = aircraft.ac_registr AND wo_event_link.event_perfno_i = wo_transfer.event_perfno_i AND wo_event_link.event_key_parent = doc_header.docno_i  
 
-ORDER BY WT2.EVENT_TRANSFERNO_I DESC ) WHERE ROWNUM = 1   )
+ORDER BY wo_transfer.event_transferno_i desc ) WHERE rownum = 1   )
 
-END AS DUE_DATE,
+End As due_date,
 
 
-       DHM.LABOUR_COST*DHM.EST_MH + DHM.MATERIAL_COST AS COST_PER_AC,
+       doc_header_more.labour_cost*doc_header_more.est_mh + doc_header_more.material_cost As Cost_per_AC,
        
-	   SUM(
-          CASE  WHEN F.EXPECTED_DATE IS NOT NULL AND WH.CLOSING_DATE IS NULL AND F.EVENT_TYPE = 'D'
+	   Sum(
+          CASE  WHEN forecast.expected_date IS NOT NULL AND wo_header.closing_date IS NULL AND forecast.event_type = 'D'
            THEN 1 ELSE 0 END
-       ) OVER (PARTITION BY  DH.DOCNO) AS PENDING,
+       ) OVER (PARTITION BY  doc_header.docno) As Pending,
 
  
 
-(SELECT DISTINCT
+(select DISTINCT
 
 
-COUNT(DISTINCT CONCAT(A2.AC_REGISTR,R2.PSN)) 
+COUNT(DISTINCT CONCAT(a2.ac_registr,r2.psn)) 
 
 
-FROM "AMOSSERVER_PROD"."DOC_HEADER" DH2
+from doc_header dh2
 
-INNER JOIN "AMOSSERVER_PROD"."EVENT_EFFECTIVITY_LINK" EEL2 ON  EEL2.EVENT_TYPE= 'DO' AND EEL2.EVENT_KEY = DH2.DOCNO_I 
-INNER JOIN "AMOSSERVER_PROD"."EVENT_EFFECTIVITY" EE ON EEL2.EFFECTIVITYNO_I = EE.EFFECTIVITYNO_I 
-INNER JOIN "AMOSSERVER_PROD"."APPLICABILITY" AP ON AP.EFFECTIVITYNO_I = EE.EFFECTIVITYNO_I AND AP.REF_TYPE IN('RO','AC_INT')
-LEFT JOIN "AMOSSERVER_PROD"."AIRCRAFT" A2 ON AP.REF_KEY = A2.AIRCRAFTNO_I
-LEFT JOIN "AMOSSERVER_PROD"."ROTABLES" R2 ON AP.REF_KEY =  R2.PSN 
+inner join event_effectivity_link eel2 on  eel2.event_type= 'DO' and eel2.event_key = dh2.docno_i 
+inner join event_effectivity ee on eel2.effectivityno_i = ee.effectivityno_i 
+inner join applicability ap on ap.effectivityno_i = ee.effectivityno_i and ap.ref_type IN('RO','AC_INT')
+LEFT JOIN aircraft a2 ON ap.ref_key = a2.aircraftno_i
+left join rotables r2 on ap.ref_key =  r2.psn 
 
-WHERE AP.APPLICABLE = 'Y' AND DH2.DOCNO_I = DH.DOCNO_I) AS TOTAL,
+WHERE ap.applicable = 'Y' AND dh2.docno_i = doc_header.docno_i) as total,
 
-MIN(WEL.CREATED_DATE) OVER (PARTITION BY DH.DOCNO_I) AS RELEASE_DATE,
+MIN(wo_event_link.created_date) OVER (PARTITION BY doc_header.docno_i) As release_date,
 
-MIN(WH.CLOSING_DATE) OVER (PARTITION BY DH.DOCNO_I) AS START_DATE,
+MIN(wo_header.closing_date) OVER (PARTITION BY doc_header.docno_i) As start_date,
 
 (SELECT DISTINCT
 CASE
-WHEN (SUM(
-          CASE  WHEN F1.EXPECTED_DATE IS NOT NULL  AND F1.EVENT_TYPE = 'D' AND WEL1.PENDING_STATUS = 0
+WHEN (Sum(
+          CASE  WHEN f1.expected_date IS NOT NULL  AND f1.event_type = 'D' AND wel1.pending_status = 0
            THEN 1 ELSE 0 END
-       ) OVER (PARTITION BY  WEL1.EVENT_KEY_PARENT)  ) = 0 THEN (MAX(WH1.CLOSING_DATE) OVER (PARTITION BY WEL1.EVENT_KEY_PARENT))
-END AS COMPLETION_DATE
+       ) OVER (PARTITION BY  wel1.event_key_parent)  ) = 0 THEN (MAX(wh1.closing_date) OVER (PARTITION BY wel1.event_key_parent))
+END As completion_date
 
-FROM "AMOSSERVER_PROD"."WO_EVENT_LINK" WEL1
+FROM wo_event_link wel1
 
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH1 ON DH1.DOCNO_I = WEL1.EVENT_KEY_PARENT
-LEFT JOIN "AMOSSERVER_PROD"."FORECAST" F1 ON WEL1.EVENT_PERFNO_I = F1.EVENT_PERFNO_I
-LEFT JOIN "AMOSSERVER_PROD"."WO_HEADER" WH1 ON WEL1.EVENT_PERFNO_I = WH1.EVENT_PERFNO_I 
-WHERE DH1.DOCNO_I = DH.DOCNO_I) COMPLETION_DATE,
+LEFT JOIN doc_header dh1 ON dh1.docno_i = wel1.event_key_parent
+LEFT JOIN forecast f1 ON wel1.event_perfno_i = f1.event_perfno_i
+LEFT JOIN wo_header wh1 ON wel1.event_perfno_i = wh1.event_perfno_i 
+WHERE dh1.docno_i = doc_header.docno_i) completion_date,
 
-      WH.PRIO,
-       TO_NUMBER(WH.EST_GROUNDTIME/1) AS EST_MHRS, /*MINUTES*/
-       WPH.WPNO,
-WPH.START_DATE AS PLANNED_DATE,
+      wo_header.prio,
+       to_number(wo_header.est_groundtime/1) As Est_MHRs, /*minutes*/
+       wp_header.wpno,
+wp_header.start_date As planned_date,
 
 CASE
 WHEN (SELECT DISTINCT
 
-COUNT(WPDH.DEASSIGNMENT_REASON) OVER (PARTITION BY DH1.DOCNO_I)  AS SUMA
+COUNT(wpdh.deassignment_reason) OVER (PARTITION BY dh1.docno_i)  as suma
 
-FROM "AMOSSERVER_PROD"."WP_DEASSIGNMENT_HISTORY" WPDH
+FROM wp_deassignment_history wpdh
 
-INNER JOIN "AMOSSERVER_PROD"."WO_EVENT_LINK" WEL1 ON WPDH.EVENT_PERFNO_I = WEL1.EVENT_PERFNO_I
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH1 ON WEL1.EVENT_KEY_PARENT = DH1.DOCNO_I
+INNER JOIN wo_event_link wel1 ON wpdh.event_perfno_i = wel1.event_perfno_i
+LEFT JOIN doc_header dh1 ON wel1.event_key_parent = dh1.docno_i
 
-WHERE DH1.DOCNO_I =  DH.DOCNO_I)  IS NOT NULL THEN  (SELECT DISTINCT
+WHERE dh1.docno_i =  doc_header.docno_i)  IS NOT NULL THEN  (SELECT DISTINCT
 
-COUNT(WPDH.DEASSIGNMENT_REASON) OVER (PARTITION BY DH1.DOCNO_I)  AS SUMA
+COUNT(wpdh.deassignment_reason) OVER (PARTITION BY dh1.docno_i)  as suma
 
-FROM "AMOSSERVER_PROD"."WP_DEASSIGNMENT_HISTORY" WPDH
+FROM wp_deassignment_history wpdh
 
-INNER JOIN "AMOSSERVER_PROD"."WO_EVENT_LINK" WEL1 ON WPDH.EVENT_PERFNO_I = WEL1.EVENT_PERFNO_I
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH1 ON WEL1.EVENT_KEY_PARENT = DH1.DOCNO_I
+INNER JOIN wo_event_link wel1 ON wpdh.event_perfno_i = wel1.event_perfno_i
+LEFT JOIN doc_header dh1 ON wel1.event_key_parent = dh1.docno_i
 
-WHERE DH1.DOCNO_I =  DH.DOCNO_I)  
+WHERE dh1.docno_i =  doc_header.docno_i)  
 ELSE 0
 
-END AS NUM_OF_DEASSIGNMENTS,
+END as num_of_deassignments,
 
-SUBSTR(WPH.STATION,1,3) AS STA,
-(SELECT DISTINCT A.VENDOR FROM "AMOSSERVER_PROD"."ADDRESS" A INNER JOIN "AMOSSERVER_PROD"."ORG_APPROVAL" ORG_A ON A.ADDRESS_I = ORG_A.MAIN_ADDRESS_I WHERE ORG_A.APPROVALNO_I = WH.APPROVALNO_I) AS MRO,
-       CASE WHEN DH.BLOCKED_BY IN( 'ALBALM', 'XAVMOR' ,'FERFUE','POLSAB','STRUCT') THEN 'STRUCTURES' 
-WHEN DH.BLOCKED_BY IN( 'JOHJAR','JASGAR','GUICON','GLORUI','VANVEL','MARJUL','SYSTEMS','AVIONIC') THEN 'SYSTEMS' 
+SUBSTR(wp_header.station,1,3) as STA,
+(SELECT DISTINCT address.vendor FROM address INNER JOIN org_approval ON address.address_i = org_approval.main_address_i WHERE org_approval.approvalno_i = wo_header.approvalno_i) As MRO,
+       CASE WHEN doc_header.blocked_by IN( 'ALBALM', 'XAVMOR' ,'FERFUE','POLSAB','STRUCT') THEN 'Structures' 
+WHEN doc_header.blocked_by IN( 'JOHJAR','JASGAR','GUICON','GLORUI','VANVEL','MARJUL','SYSTEMS','AVIONIC') THEN 'Systems' 
 
-WHEN DH.BLOCKED_BY IN( 'CRIRIB','SANMOR','ENGINES') THEN 'ENGINES' 
-WHEN DH.BLOCKED_BY = 'JAUESP' THEN 'JAUME E.' 
-WHEN DH.BLOCKED_BY IN( 'CARROS','VERMAR') THEN 'MAINTENANCE PROGRAM' 
-WHEN DH.BLOCKED_BY IN( 'RELIAB') THEN 'RELIABILITY' 
- END AS RESPONSIBLE,
+WHEN doc_header.blocked_by IN( 'CRIRIB','SANMOR','ENGINES') THEN 'ENGINES' 
+WHEN doc_header.blocked_by = 'JAUESP' THEN 'Jaume E.' 
+WHEN doc_header.blocked_by IN( 'CARROS','VERMAR') THEN 'Maintenance Program' 
+WHEN doc_header.blocked_by IN( 'RELIAB') THEN 'Reliability' 
+ END As Responsible,
 
 CASE
 
 
 WHEN SUBSTR((SELECT DISTINCT
-LISTAGG(( '{PARTNO: ' ||PRT.PARTNO || '| QTY: ' || TO_NUMBER(PRT.QTY) || '| PERC: ' || PRT.PERCENTAGE || ' % }'), '; ') 
-WITHIN GROUP (ORDER BY PRT.PARTNO) OVER (PARTITION BY DH2.DOCNO_I) AS PART_REQUEST
+LISTAGG(( '{PARTNO: ' ||prt.partno || '| QTY: ' || TO_NUMBER(prt.qty) || '| Perc: ' || prt.percentage || ' % }'), '; ') WITHIN GROUP (ORDER BY prt.partno) OVER (PARTITION BY dh2.docno_i) as part_request
 
 
-FROM "AMOSSERVER_PROD"."DOC_HEADER" DH2
-JOIN "AMOSSERVER_PROD"."EVENT_EFFECTIVITY_LINK" EEL ON DH2.DOCNO_I = EEL.EVENT_KEY
-	AND EEL.EVENT_TYPE = 'DO'
-JOIN "AMOSSERVER_PROD"."EVENT_EFFECTIVITY" EE ON EEL.EFFECTIVITYNO_I = EE.EFFECTIVITYNO_I
-JOIN "AMOSSERVER_PROD"."WORKTEMPLATE_LINK" WTL ON WTL.EVENT_TYPE = 'EFL'
-	AND EEL.EFFECTIVITY_LINKNO_I = WTL.EVENT_KEY
-JOIN "AMOSSERVER_PROD"."EVENT_TEMPLATE" ET ON WTL.WTNO_I = ET.WTNO_I
-	AND ET.REVISION_STATUS = 1 /*ONLY ACTIVE*/
-JOIN "AMOSSERVER_PROD"."WORKSTEP_LINK" WSL ON ET.EVENT_PERFNO_I = WSL.EVENT_PERFNO_I
-JOIN "AMOSSERVER_PROD"."PART_REQUEST_TEMPLATE" PRT ON WSL.DESCNO_I = PRT.EVENT_KEY
-	AND PRT.EVENT_TYPE = 'WS'
+FROM doc_header dh2
+JOIN event_effectivity_link eel ON dh2.docno_i = eel.event_key
+	AND eel.event_type = 'DO'
+JOIN event_effectivity ee ON eel.effectivityno_i = ee.effectivityno_i
+JOIN worktemplate_link wtl ON wtl.event_type = 'EFL'
+	AND eel.effectivity_linkno_i = wtl.event_key
+JOIN event_template et ON wtl.wtno_i = et.wtno_i
+	AND revision_status = 1 /*only active*/
+JOIN workstep_link wsl ON et.event_perfno_i = wsl.event_perfno_i
+JOIN part_request_template prt ON wsl.descno_i = prt.event_key
+	AND prt.event_type = 'WS'
 
-WHERE LENGTH(PRT.PARTNO) > 6 AND EEL.EFFECTIVITY_LINKNO_I = (SELECT DISTINCT MIN(EEL2.EFFECTIVITY_LINKNO_I) OVER (PARTITION BY DH2.DOCNO_I) 
-FROM "AMOSSERVER_PROD"."EVENT_EFFECTIVITY_LINK" EEL2 WHERE DH2.DOCNO_I = EEL2.EVENT_KEY) AND DH2.DOCNO_I =  DH.DOCNO_I ), 1, 200) IS NOT NULL THEN SUBSTR((SELECT DISTINCT
-LISTAGG(( '{PARTNO: ' ||PRT.PARTNO || '| QTY: ' || TO_NUMBER(PRT.QTY) || '| PERC: ' || PRT.PERCENTAGE || ' % }'), '; ') 
-WITHIN GROUP (ORDER BY PRT.PARTNO) OVER (PARTITION BY DH2.DOCNO_I) AS PART_REQUEST
+WHERE length(prt.partno) > 6 AND eel.effectivity_linkno_i = (SELECT DISTINCT MIN(eel2.effectivity_linkno_i) OVER (PARTITION BY dh2.docno_i) FROM event_effectivity_link eel2 WHERE dh2.docno_i = eel2.event_key) AND dh2.docno_i =  doc_header.docno_i ), 1, 200) IS NOT NULL THEN SUBSTR((SELECT DISTINCT
+LISTAGG(( '{PARTNO: ' ||prt.partno || '| QTY: ' || TO_NUMBER(prt.qty) || '| Perc: ' || prt.percentage || ' % }'), '; ') WITHIN GROUP (ORDER BY prt.partno) OVER (PARTITION BY dh2.docno_i) as part_request
 
 
-FROM "AMOSSERVER_PROD"."DOC_HEADER" DH2
-JOIN "AMOSSERVER_PROD"."EVENT_EFFECTIVITY_LINK" EEL ON DH2.DOCNO_I = EEL.EVENT_KEY
-	AND EEL.EVENT_TYPE = 'DO'
-JOIN "AMOSSERVER_PROD"."EVENT_EFFECTIVITY" EE ON EEL.EFFECTIVITYNO_I = EE.EFFECTIVITYNO_I
-JOIN "AMOSSERVER_PROD"."WORKTEMPLATE_LINK" WTL ON WTL.EVENT_TYPE = 'EFL'
-	AND EEL.EFFECTIVITY_LINKNO_I = WTL.EVENT_KEY
-JOIN "AMOSSERVER_PROD"."EVENT_TEMPLATE" ET ON WTL.WTNO_I = ET.WTNO_I
-	AND ET.REVISION_STATUS = 1 /*ONLY ACTIVE*/
-JOIN "AMOSSERVER_PROD"."WORKSTEP_LINK" WSL ON ET.EVENT_PERFNO_I = WSL.EVENT_PERFNO_I
-JOIN "AMOSSERVER_PROD"."PART_REQUEST_TEMPLATE" PRT ON WSL.DESCNO_I = PRT.EVENT_KEY
-	AND PRT.EVENT_TYPE = 'WS'
+FROM doc_header dh2
+JOIN event_effectivity_link eel ON dh2.docno_i = eel.event_key
+	AND eel.event_type = 'DO'
+JOIN event_effectivity ee ON eel.effectivityno_i = ee.effectivityno_i
+JOIN worktemplate_link wtl ON wtl.event_type = 'EFL'
+	AND eel.effectivity_linkno_i = wtl.event_key
+JOIN event_template et ON wtl.wtno_i = et.wtno_i
+	AND revision_status = 1 /*only active*/
+JOIN workstep_link wsl ON et.event_perfno_i = wsl.event_perfno_i
+JOIN part_request_template prt ON wsl.descno_i = prt.event_key
+	AND prt.event_type = 'WS'
 
-WHERE LENGTH(PRT.PARTNO) > 6 AND EEL.EFFECTIVITY_LINKNO_I = (SELECT DISTINCT MIN(EEL2.EFFECTIVITY_LINKNO_I) OVER (PARTITION BY DH2.DOCNO_I) 
-FROM "AMOSSERVER_PROD"."EVENT_EFFECTIVITY_LINK" EEL2 WHERE DH2.DOCNO_I = EEL2.EVENT_KEY) AND DH2.DOCNO_I =  DH.DOCNO_I ), 1, 200)
+WHERE length(prt.partno) > 6 AND eel.effectivity_linkno_i = (SELECT DISTINCT MIN(eel2.effectivity_linkno_i) OVER (PARTITION BY dh2.docno_i) FROM event_effectivity_link eel2 WHERE dh2.docno_i = eel2.event_key) AND dh2.docno_i =  doc_header.docno_i ), 1, 200)
 
 WHEN SUBSTR((SELECT DISTINCT
 
-LISTAGG(( '{PARTNO: ' ||PRT.PARTNO || '| QTY: ' || TO_NUMBER(PRT.QTY) || '| PERC: ' || PRT.PERCENTAGE || ' % }'), '; ') 
-WITHIN GROUP (ORDER BY PRT.PARTNO) OVER (PARTITION BY DH2.DOCNO_I) AS PART_REQUEST
-FROM "AMOSSERVER_PROD"."DOC_HEADER" DH2
-JOIN "AMOSSERVER_PROD"."REQUIREMENT_HEADER" RH ON DH2.DOCNO_I = RH.EVENT_KEY
-	AND RH.EVENT_TYPE = 'DO'
-JOIN "AMOSSERVER_PROD"."WORKTEMPLATE_LINK" WTL ON RH.REQUIREMENT_HEADERNO_I= WTL.EVENT_KEY
-	AND WTL.EVENT_TYPE = 'REQH'
-JOIN "AMOSSERVER_PROD"."EVENT_TEMPLATE" ET ON WTL.WTNO_I = ET.WTNO_I
-	AND ET.REVISION_STATUS = 1 /*ONLY ACTIVE*/
-JOIN "AMOSSERVER_PROD"."WORKSTEP_LINK" WSL ON ET.EVENT_PERFNO_I = WSL.EVENT_PERFNO_I
-JOIN "AMOSSERVER_PROD"."PART_REQUEST_TEMPLATE" PRT ON WSL.DESCNO_I = PRT.EVENT_KEY
-	AND PRT.EVENT_TYPE = 'WS'
-WHERE  LENGTH(PRT.PARTNO) > 6 AND DH2.DOCNO_I = DH.DOCNO_I),1,200) IS NOT NULL THEN  SUBSTR((SELECT DISTINCT
+LISTAGG(( '{PARTNO: ' ||prt.partno || '| QTY: ' || TO_NUMBER(prt.qty) || '| Perc: ' || prt.percentage || ' % }'), '; ') WITHIN GROUP (ORDER BY prt.partno) OVER (PARTITION BY dh2.docno_i) as part_request
+FROM doc_header dh2
+JOIN requirement_header rh ON dh2.docno_i = rh.event_key
+	AND rh.event_type = 'DO'
+JOIN worktemplate_link wtl ON rh.requirement_headerno_i= wtl.event_key
+	AND wtl.event_type = 'REQH'
+JOIN event_template et ON wtl.wtno_i = et.wtno_i
+	AND revision_status = 1 /*only active*/
+JOIN workstep_link wsl ON et.event_perfno_i = wsl.event_perfno_i
+JOIN part_request_template prt ON wsl.descno_i = prt.event_key
+	AND prt.event_type = 'WS'
+WHERE  length(prt.partno) > 6 AND dh2.docno_i = doc_header.docno_i),1,200) IS NOT NULL THEN  SUBSTR((SELECT DISTINCT
 
-LISTAGG(( '{PARTNO: ' ||PRT.PARTNO || '| QTY: ' || TO_NUMBER(PRT.QTY) || '| PERC: ' || PRT.PERCENTAGE || ' % }'), '; ') 
-WITHIN GROUP (ORDER BY PRT.PARTNO) OVER (PARTITION BY DH2.DOCNO_I) AS PART_REQUEST
-FROM "AMOSSERVER_PROD"."DOC_HEADER" DH2
-JOIN "AMOSSERVER_PROD"."REQUIREMENT_HEADER" RH ON DH2.DOCNO_I = RH.EVENT_KEY
-	AND RH.EVENT_TYPE = 'DO'
-JOIN "AMOSSERVER_PROD"."WORKTEMPLATE_LINK" WTL ON RH.REQUIREMENT_HEADERNO_I= WTL.EVENT_KEY
-	AND WTL.EVENT_TYPE = 'REQH'
-JOIN "AMOSSERVER_PROD"."EVENT_TEMPLATE" ET ON WTL.WTNO_I = ET.WTNO_I
-	AND ET.REVISION_STATUS = 1 /*ONLY ACTIVE*/
-JOIN "AMOSSERVER_PROD"."WORKSTEP_LINK" WSL ON ET.EVENT_PERFNO_I = WSL.EVENT_PERFNO_I
-JOIN "AMOSSERVER_PROD"."PART_REQUEST_TEMPLATE" PRT ON WSL.DESCNO_I = PRT.EVENT_KEY
-	AND PRT.EVENT_TYPE = 'WS'
-WHERE  LENGTH(PRT.PARTNO) > 6 AND DH2.DOCNO_I = DH.DOCNO_I),1,200)
+LISTAGG(( '{PARTNO: ' ||prt.partno || '| QTY: ' || TO_NUMBER(prt.qty) || '| Perc: ' || prt.percentage || ' % }'), '; ') WITHIN GROUP (ORDER BY prt.partno) OVER (PARTITION BY dh2.docno_i) as part_request
+FROM doc_header dh2
+JOIN requirement_header rh ON dh2.docno_i = rh.event_key
+	AND rh.event_type = 'DO'
+JOIN worktemplate_link wtl ON rh.requirement_headerno_i= wtl.event_key
+	AND wtl.event_type = 'REQH'
+JOIN event_template et ON wtl.wtno_i = et.wtno_i
+	AND revision_status = 1 /*only active*/
+JOIN workstep_link wsl ON et.event_perfno_i = wsl.event_perfno_i
+JOIN part_request_template prt ON wsl.descno_i = prt.event_key
+	AND prt.event_type = 'WS'
+WHERE  length(prt.partno) > 6 AND dh2.docno_i = doc_header.docno_i),1,200)
 
 ELSE 'N/A'
 
-END AS PART_REQUEST,
+END As part_request,
 
-CURRENT_DATE AS CURR_DATE     
+to_number(
+             to_char(
+                to_date(current_date)-to_date(
+                   '04/04/2015',
+                   'dd/mm/yyyy'
+                )
+             )
+          ) + 15800 ref_date    
 
-FROM "AMOSSERVER_PROD"."WO_EVENT_LINK" WEL
-LEFT JOIN "AMOSSERVER_PROD"."WO_HEADER" WH  ON WEL.EVENT_PERFNO_I = WH.EVENT_PERFNO_I    
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER" DH ON  WEL.EVENT_KEY_PARENT = DH.DOCNO_I    
-LEFT JOIN "AMOSSERVER_PROD"."FORECAST" F ON WH.EVENT_PERFNO_I = F.EVENT_PERFNO_I   
-LEFT JOIN "AMOSSERVER_PROD"."WP_ASSIGNMENT" WPA ON WH.EVENT_PERFNO_I = WPA.EVENT_PERFNO_I 
-LEFT JOIN "AMOSSERVER_PROD"."WP_HEADER" WPH ON WPA.WPNO_I = WPH.WPNO_I 
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER_CLASSIFICATION" DHC ON DH.DOCNO_I = DHC.DOCNO_I    
-LEFT JOIN "AMOSSERVER_PROD"."DOC_HEADER_MORE" DHM ON DH.DOCNO_I = DHM.DOCNO_I 
-LEFT JOIN "AMOSSERVER_PROD"."DEPARTMENT" D ON DHM.REQ_DEPARTMENT = D.DEPARTMENT  
+FROM wo_event_link   
+LEFT JOIN wo_header  ON wo_event_link.event_perfno_i = wo_header.event_perfno_i    
+LEFT JOIN doc_header ON  wo_event_link.event_key_parent = doc_header.docno_i    
+LEFT JOIN forecast ON wo_header.event_perfno_i = forecast.event_perfno_i   
+LEFT JOIN wp_assignment ON wo_header.event_perfno_i = wp_assignment.event_perfno_i 
+LEFT JOIN wp_header ON wp_assignment.wpno_i = wp_header.wpno_i 
+LEFT JOIN doc_header_classification ON doc_header.docno_i = doc_header_classification.docno_i    
+LEFT JOIN doc_header_more ON doc_header.docno_i = doc_header_more.docno_i 
+LEFT JOIN department ON doc_header_more.req_department = department.department  
 
-LEFT JOIN "AMOSSERVER_PROD"."AIRCRAFT" A ON WH.AC_REGISTR = A.AC_REGISTR
+LEFT JOIN aircraft ON wo_header.ac_registr = aircraft.ac_registr
 
-WHERE  A.STATUS = 0      
-      AND WEL.EVENT_STATUS IN(
+WHERE  aircraft.status = 0      
+      AND wo_event_link.event_status IN(
          'O',
          'C',
          'V',
          'Y' 
       )       
-      AND DHC.CLASSIFICATION = 'CAMP' 
+      AND doc_header_classification.classification = 'CAMP' 
       AND (
-         WH.CLOSING_DATE IS NOT NULL 
+         wo_header.closing_date IS NOT NULL 
          OR  (
-            WEL.EVENT_STATUS IN(
+            wo_event_link.event_status IN(
                'Y' ,
                'O'
             ) 
-            AND WH.CLOSING_DATE IS NULL 
-            AND F.EXPECTED_DATE <  24838 
-            AND F.EXPECTED_DATE IS NOT NULL 
-         ) AND F.EVENT_TYPE = 'D'
+            AND wo_header.closing_date IS NULL 
+            AND forecast.expected_date <  24838 
+            AND forecast.expected_date IS NOT NULL 
+         ) AND forecast.event_type = 'D'
       ) 	  
-ORDER BY  DUE_DATE
+ORDER BY  due_date
